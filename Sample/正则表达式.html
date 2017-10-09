@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>正则表达式数据验证</title>
+<style type="text/css">
+.TdRight{text-align:right; font-size:14px; font-weight:bolder; vertical-align:top;}
+.TextBox{height:22px; width:400px;}
+.divVal{color:#F00; font-size:12px; font-weight:bold; display:none; margin:6px;}
+.Asked {color:#F00;}
+</style>
+<script type="text/javascript">
+	//校验是否全由数字组成 
+	function isDigit(Str)
+	{
+		var patrn=/^[0-9]{1,20}$/;
+		if (!patrn.exec(Str)) 
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	//检验手机号码
+	function isMobil(Str)
+	{
+		var patrn=/^(13[0-9]|15[0-9]|18[0-9]|14[3|6|7|8])\d{8}$/;
+		if (!patrn.exec(Str))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	//校验登录名：只能输入6-20个以字母开头、可带数字、下划线的字串
+	function isRegisterUserID(Str)
+	{
+		var patrn=/^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){5,19}$/;
+		if (!patrn.exec(Str))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	function CheckUserID()
+	{//检测用户代码
+		var _UserID = document.getElementById("txtUserID").value;
+		if(isRegisterUserID(_UserID) == false || _UserID.length <= 0)
+		{
+			document.getElementById("UserID").style.display = "block";
+		}
+		else
+		{
+			document.getElementById("UserID").style.display = "none";
+		}
+	}	
+	
+	function CheckAge()
+	{//检测年龄
+		var _Age = document.getElementById("txtAge").value;
+		//1至3为整数的正则表达式
+		var patrn=/^[0-9]{1,3}$/;
+		if (patrn.exec(_Age))
+		{
+			document.getElementById("Age").style.display = "none";
+		}
+		else
+		{
+			document.getElementById("Age").style.display = "block";
+		}
+	}	
+	
+	function CheckID()
+	{//检测身份证
+		var _ID = document.getElementById("txtID").value;
+		//身份证的正则表达式
+		var patrn=/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+		if (patrn.exec(_ID))
+		{
+			document.getElementById("ID").style.display = "none";
+		}
+		else
+		{
+			document.getElementById("ID").style.display = "block";
+		}
+	}	
+	
+	function CheckEmail()
+	{//检测邮箱
+		var _Email = document.getElementById("txtEmail").value;
+		//邮箱正则表达式
+		var patrn=/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+		if (patrn.exec(_Email))
+		{
+			document.getElementById("Email").style.display = "none";
+		}
+		else
+		{
+			document.getElementById("Email").style.display = "block";
+		}
+	}
+	
+	function Manage()
+	{	
+		//校验数据	
+		CheckUserID();
+		CheckAge();
+		CheckID();
+		CheckEmail();
+		
+		//获取用户代码
+		var _UserID = document.getElementById("txtUserID").value;
+		//获取姓名
+		var _Name = document.getElementById("txtName").value;
+		//获取年龄
+		var _Age = document.getElementById("txtAge").value;
+		//获取身份证号码
+		var _ID = document.getElementById("txtID").value;
+		//获取邮箱
+		var _Email = document.getElementById("txtEmail").value;
+			
+		//获取性别
+		var _Sex = "";	
+		var _XingB = document.getElementsByName("Sex");
+		for(var i=0; i <= _XingB.length -1; i++)
+		{
+			if(_XingB[i].checked == true)
+			{
+				_Sex = _XingB[i].value;
+			}
+		}
+		
+		//获取班级
+		var _ClassName = document.getElementById("ddlUnits");
+		var _Index = _ClassName.selectedIndex;
+		var _Units = _ClassName[_Index].value;
+		
+		//获取课程
+		var _Courseware = "";	
+		var _Cours = document.getElementsByName("Courseware");
+		for(var i=0; i <= _Cours.length -1; i++)
+		{
+			if(_Cours[i].checked == true)
+			{
+				if(_Courseware.length == 0)
+				{
+					_Courseware = _Cours[i].value;
+				}
+				else
+				{
+					_Courseware = _Courseware + "、" + _Cours[i].value;
+				}
+			}
+		}
+		
+		//获取个人特长
+		var _Remark = document.getElementById("txtRemark").value;	
+		
+		//结果输出
+		document.getElementById("Result").innerHTML = "用户代码是： " + _UserID + "<br />" +
+			"姓名是： " + _Name + "<br />" +
+			"年龄是： " + _Age + "<br />" +
+			"身份证号码是： " + _ID + "<br />" +
+			"邮箱是： " + _Email + "<br />" +
+			"性别是： " + _Sex + "<br />" +
+			"班级是： " + _Units + "<br />" +
+			"课程是： " + _Courseware + "<br />" +
+			"个人特长为： " + _Remark;
+	}
+</script>
+</head>
+
+<body>
+<div style="width:510px; margin:0 auto;">
+    <table width="100%" cellspacing="6px" border="0">
+      <tr>
+        <td class="TdRight">用户代码</td>
+        <td><input name="txtUserID" id="txtUserID" onchange="CheckUserID()" class="TextBox" type="text" /><span class="Asked">*</span>
+        <div class="divVal" id="UserID">用户代码不允许为空，只能输入字母、数字和下划线，长度为6-20个字符</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="TdRight">姓名</td>
+        <td><input name="txtName" id="txtName" class="TextBox" type="text" /></td>
+      </tr>
+      <tr>
+        <td class="TdRight">年龄</td>
+        <td><input name="txtAge" id="txtAge" onchange="CheckAge()" class="TextBox" type="text" /><span class="Asked">*</span>
+        <div class="divVal" id="Age">年龄不允许空，为且只能输入3位内的数字</div></td>
+      </tr>
+      <tr>
+        <td class="TdRight">身份证号码</td>
+        <td><input name="txtID" id="txtID" onchange="CheckID()" class="TextBox" type="text" /><span class="Asked">*</span>
+        <div class="divVal" id="ID">身份证号码不允许为空，且仅能输入15位或18位的数字或字母X</div></td>
+      </tr>
+      <tr>
+        <td class="TdRight">邮箱</td>
+        <td><input name="txtEmail" id="txtEmail" onchange="CheckEmail()" class="TextBox" type="text" /><span class="Asked">*</span>
+        <div class="divVal" id="Email">邮箱不允许为空，且需要为合法邮箱</div></td>
+      </tr>
+      <tr>
+        <td class="TdRight">性别</td>
+        <td><input type="radio" name="Sex" value="男" checked="true" />男<input type="radio" name="Sex" value="女"/>女</td>
+      </tr>
+      <tr>
+        <td class="TdRight">班级</td>
+        <td>
+          <select id="ddlUnits" name="ddlUnits" class="TextBox" >
+            <option>计算机科学与技术1班</option>
+            <option>计算机科学与技术2班</option>
+            <option>计算机科学与技术3班</option>
+            <option>软件与技术1班</option>
+            <option>电子商务1班</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td class="TdRight">课程</td>
+        <td><input type="checkbox" name="Courseware" value="Web标准技术" />Web标准技术<input type="checkbox" name="Courseware" value="Java"/>Java术<input type="checkbox" name="Courseware" value=".Net"/>.Net<input type="checkbox" name="Courseware" value="数据库"/>数据库<input type="checkbox" name="Courseware" value="Android"/>Android</td>
+      </tr>
+      <tr>
+        <td class="TdRight">个人特长</td>
+        <td>
+        <textarea name="txtRemark" id="txtRemark" style="width:400px;" cols="45" rows="5"></textarea></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input name="btnQueR" style="width:100px; height:40px;" type="button" onclick="Manage()" value="确认" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><span id="Result" style="color:#F00;"></span></td>
+      </tr>
+    </table>
+</div>
+</body>
+</html>
